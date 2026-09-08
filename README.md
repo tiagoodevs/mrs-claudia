@@ -1,129 +1,260 @@
-# Discord API Toolkit
+# Mrs Claudia
+
 A Discord bot providing API utilities, debugging tools, database utilities, encoding helpers, hashing tools, JWT decoding, JSON formatting, webhook utilities, and API request building.
+
 ## AI-Generated Software
+
 This project was created with substantial assistance from AI tools.
-Much of the source code was generated using Claude by Anthropic.
-This repository does not claim sole human authorship of AI-generated portions.
+
+Much of the source code was generated using Claude by Anthropic. This repository does not claim sole human authorship of AI-generated portions.
+
 See [AI_DISCLOSURE.md](AI_DISCLOSURE.md) for more information.
+
 ## Features
+
 - API request tools
 - API request builder
 - API request execution
 - Batch API requests
 - Webhook utilities
 - DNS debugging
-- HTTP ping tools
-- HTTP header inspection
-- SSL debugging
-- SQLite database utilities
-- Base64 encoding and decoding
-- Hash generation
-- JWT decoding
+- Database utilities
 - JSON formatting
+- Base64 encoding and decoding
+- SHA-256 hashing
+- UUID generation
+- JWT decoding
+- Discord utilities
+- SQLite database
+- Environment-based configuration
+
 ## Requirements
-- Bun 1.2+
-- A Discord application and bot
-- Discord bot token
-- Discord application/client ID
+
+- [Bun](https://bun.sh/) 1.2+
+- Git
+- A Discord application
+- A Discord bot token
+
+Node.js is not required when running the project with Bun.
+
 ## Installation
+
 Clone the repository:
+
 ```bash
-git clone https://github.com/carteraccs/api-bot.git
-cd api-bot
+git clone https://github.com/carteraccs/mrs-claudia.git
+cd mrs-claudia
+```
 
 Install dependencies:
 
+```bash
 bun install
+```
 
-Create your environment file:
+## Environment Variables
 
+Copy the example environment file:
+
+```bash
 cp .env.example .env
+```
 
-Edit .env and provide your Discord credentials.
+Edit `.env`:
 
-Development
+```env
+DISCORD_TOKEN=your_discord_bot_token
+CLIENT_ID=your_discord_application_client_id
+```
 
-Run the bot in development mode:
+**Never commit `.env` or expose your Discord bot token.**
 
+If your token has ever been exposed publicly, revoke it through the Discord Developer Portal and generate a new one.
+
+## Development
+
+Start the bot in development mode:
+
+```bash
 bun run dev
+```
 
-Build
+## Build
 
-Build the TypeScript project:
+Compile the TypeScript source:
 
+```bash
 bun run build
+```
 
-Production
+The compiled output is written to:
 
-Start the compiled bot:
+```text
+dist/
+```
 
+## Production
+
+Start the compiled application:
+
+```bash
 bun run start
+```
 
-Docker
+## Database
 
-Build the image:
+The project uses SQLite.
 
-docker build -t discord-api-toolkit .
+The database file is:
 
-Run it:
+```text
+database.sqlite
+```
 
-docker run -d \
-  --name discord-api-toolkit \
-  --restart unless-stopped \
-  --env-file .env \
-  -v discord-api-toolkit-data:/app/data \
-  discord-api-toolkit
+The database is created automatically when the application starts.
 
-The SQLite database is stored in /app/data/database.sqlite.
+For Docker deployments, the database should be persisted using `/app/data`.
 
-Coolify
+## Docker
 
-The project can be deployed using Docker through Coolify.
+The repository includes a Bun-based Dockerfile.
 
-Use the repository as the source and select Dockerfile-based deployment.
+### Build
 
-Configure the required environment variables through your deployment environment.
+```bash
+docker build -t mrs-claudia .
+```
 
-Persistent storage should be mounted to:
+### Run
 
+```bash
+docker run -d \\
+  --name mrs-claudia \\
+  --restart unless-stopped \\
+  --env-file .env \\
+  -v mrs-claudia-data:/app/data \\
+  mrs-claudia
+```
+
+The SQLite database is stored inside the container at:
+
+```text
+/app/data/database.sqlite
+```
+
+Persist `/app/data` so the database survives container recreation.
+
+### View Logs
+
+```bash
+docker logs -f mrs-claudia
+```
+
+### Stop
+
+```bash
+docker stop mrs-claudia
+```
+
+### Restart
+
+```bash
+docker restart mrs-claudia
+```
+
+### Remove
+
+```bash
+docker rm -f mrs-claudia
+```
+
+## Coolify
+
+Mrs. Claudia can be deployed through Coolify using the included Dockerfile.
+
+### Repository
+
+Use:
+
+```text
+https://github.com/carteraccs/mrs-claudia.git
+```
+
+Select **Dockerfile** as the deployment method.
+
+### Environment Variables
+
+Add the following environment variables in Coolify:
+
+```env
+DISCORD_TOKEN=your_discord_bot_token
+CLIENT_ID=your_discord_application_client_id
+```
+
+### Persistent Storage
+
+Create a persistent volume mounted to:
+
+```text
 /app/data
+```
 
-Environment Variables
+This keeps the SQLite database between deployments.
 
-Variable	Required	Description
-DISCORD_TOKEN	Yes	Discord bot token
-CLIENT_ID	Yes	Discord application/client ID
+After configuring the application, deploy it through Coolify and check the application logs to verify that the bot connects successfully.
 
-Never commit .env or any Discord bot token to Git.
+## Project Structure
 
-Security
+```text
+.
+├── src/
+│   ├── commands/
+│   ├── database/
+│   ├── utils/
+│   └── index.ts
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── AI_DISCLOSURE.md
+├── Dockerfile
+├── LICENSE
+├── package.json
+├── schema.sql
+├── tsconfig.json
+└── README.md
+```
 
-If a Discord bot token is accidentally exposed, revoke and regenerate it immediately through the Discord Developer Portal.
+## Scripts
 
-Do not share bot tokens, API keys, database credentials, or other secrets publicly.
+| Command | Description |
+|---|---|
+| `bun install` | Install dependencies |
+| `bun run dev` | Start development mode |
+| `bun run build` | Compile TypeScript |
+| `bun run start` | Start production build |
 
-See SECURITY.md⁠ for security reporting information.
+## Security
 
-License
+Please report security vulnerabilities responsibly.
 
-This project is released under the MIT License.
+See [SECURITY.md](SECURITY.md) for the security policy.
 
-See LICENSE⁠ for the full license text.
+Never publish:
 
-Disclaimer
+- Discord bot tokens
+- API keys
+- Database credentials
+- `.env` files
+- Private deployment credentials
 
-This project is provided as-is.
+## License
 
-The maintainers are not responsible for damage, data loss, API abuse, account restrictions, service interruptions, or other consequences resulting from use of this software.
+This project is licensed under the MIT License.
 
-Users are responsible for complying with Discord’s Terms of Service, API policies, applicable laws, and the policies of any third-party APIs they access.
+See [LICENSE](LICENSE) for the full license text.
 
-Contributing
+## AI Disclosure
 
-Pull requests and improvements are welcome.
+This project was developed with substantial assistance from AI tools, including Claude by Anthropic.
 
-Before submitting changes, make sure the project builds successfully:
-
-bun run build
-
-Also review security implications and dependency licenses before submitting changes.
+See [AI_DISCLOSURE.md](AI_DISCLOSURE.md) for additional information.
