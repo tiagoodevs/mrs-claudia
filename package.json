@@ -1,0 +1,28 @@
+{
+  "name": "discord-api-toolkit-bot",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Discord bot: REST API testing client, domain diagnostic toolkit, utility engine, and SQLite-backed administration platform.",
+  "main": "dist/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "bun dist/index.js",
+    "dev": "bun --watch src/index.ts",
+    "db:init": "node -e \"const Database=require('better-sqlite3');const fs=require('fs');const db=new Database(process.env.DATABASE_PATH||'database.sqlite');db.exec(fs.readFileSync('schema.sql','utf8'));console.log('Database initialized.');\""
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "better-sqlite3": "^11.3.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@types/better-sqlite3": "^7.6.11",
+    "typescript": "^5.5.4",
+    "ts-node-dev": "^2.0.0"
+  },
+  "engines": {
+    "bun": ">=1.2.0"
+  }
+}
