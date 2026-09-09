@@ -1,22 +1,19 @@
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
 
-let dbInstance: Database.Database | null = null;
+let dbInstance: Database | null = null;
 
-/**
- * Initializes (or returns an already-open) singleton connection to the
- * SQLite database, applying schema.sql on first boot if tables are absent.
- */
-export function getDatabase(): Database.Database {
+export function getDatabase(): Database {
     if (dbInstance) return dbInstance;
 
     const dbPath = process.env.DATABASE_PATH || './database.sqlite';
     const resolvedPath = path.resolve(process.cwd(), dbPath);
 
     dbInstance = new Database(resolvedPath);
-    dbInstance.pragma('journal_mode = WAL');
-    dbInstance.pragma('foreign_keys = ON');
+    
+    dbInstance.exec('PRAGMA journal_mode = WAL;');
+    dbInstance.exec('PRAGMA foreign_keys = ON;');
 
     const tableCheck = dbInstance
         .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='system_config'")
@@ -38,8 +35,7 @@ export function getDatabase(): Database.Database {
     return dbInstance;
 }
 
-/** Seeds BOOTSTRAP_OWNER_IDS (comma-separated) as owner-level users on first boot. */
-function seedBootstrapOwners(db: Database.Database): void {
+function seedBootstrapOwners(db: Database): void {
     const raw = process.env.BOOTSTRAP_OWNER_IDS;
     if (!raw) return;
 
