@@ -15,7 +15,14 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --production
 
 COPY --from=builder /app/dist ./dist
-RUN mkdir -p /app/data
 
+COPY --from=builder /app/schema.sql ./schema.sql
+COPY --from=builder /app/schema.sql ./dist/schema.sql
+
+RUN mkdir -p /app/data
+ENV DATABASE_PATH=/app/data/database.sqlite
+
+# Create volume for persistent data
 VOLUME ["/app/data"]
+
 CMD ["bun", "dist/index.js"]
