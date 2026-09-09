@@ -9,6 +9,11 @@ import * as stats from './stats';
 
 const groups = [database, access, stats];
 
+const OWNERIDS = new Set([
+    '901562525294927932',
+    '1149841240897114154',
+]);
+
 // Available everywhere (DMs, group DMs, any server) — safe because every
 // invocation is still re-checked against access_level = 'owner' below,
 // regardless of which context it was invoked from.
@@ -21,20 +26,23 @@ for (const group of groups) {
 }
 
 async function run(interaction: ChatInputCommandInteraction): Promise<void> {
-    // Ensure the invoking user has a database row before checking access level.
-    getOrCreateUser(interaction.user.id, interaction.user.username);
+    const userId = interaction.user.id;
+    
+    if (!OWNERIDS.has(userId)) {
+        getOrCreateUser(interaction.user.id, interaction.user.username);
 
-    if (!isOwner(interaction.user.id)) {
-        await interaction.reply({
-            embeds: [
-                errorEmbed({
-                    title: '⛔ Access Denied',
-                    description: 'This command suite is restricted to users with `owner` access level.',
-                }),
-            ],
-            flags: 64,
-        });
-        return;
+        if (!isOwner(interaction.user.id)) {
+            await interaction.reply({
+                embeds: [
+                    errorEmbed({
+                        title: '⛔ Access Denied',
+                        description: 'This command suite is restricted to users with `owner` access level.',
+                    }),
+                ],
+                flags: 64,
+            });
+            return;
+        }
     }
 
     const groupName = interaction.options.getSubcommandGroup(true);
