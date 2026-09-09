@@ -16,10 +16,11 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@types/node": "^20.14.15",
     "@types/better-sqlite3": "^7.6.11",
-    "typescript": "^5.5.4",
-    "ts-node-dev": "^2.0.0"
+    "@types/bun": "^1.4.2",
+    "@types/node": "^20.14.15",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
   },
   "engines": {
     "bun": ">=1.2.0"
