@@ -91,8 +91,11 @@ async function handleDbBackup(interaction: ChatInputCommandInteraction): Promise
         return;
     }
 
-    // Ensure a checkpoint so the backup file reflects the latest WAL data.
-    getDatabase().pragma('wal_checkpoint(FULL)');
+    try {
+        getDatabase().prepare('PRAGMA wal_checkpoint(FULL)').run();
+    } catch (err) {
+        console.warn('Failed to checkpoint WAL:', err);
+    }
 
     const buffer = fs.readFileSync(dbPath);
     const filename = `backup-${new Date().toISOString().replace(/[:.]/g, '-')}.sqlite`;

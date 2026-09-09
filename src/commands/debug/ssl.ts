@@ -51,7 +51,7 @@ function inspectCertificate(host: string, port: number, timeoutMs = 8000): Promi
             reject(new Error('Connection timed out.'));
         });
 
-        socket.on('error', (err) => reject(err));
+        socket.on('error', (err:any) => reject(err));
     });
 }
 

@@ -44,7 +44,7 @@ function measureTcpAndTls(host: string, port: number, useTls: boolean): Promise<
                 resolve({ tcpMs, tlsMs });
             });
 
-            tlsSocket.on('error', (err) => reject(err));
+            tlsSocket.on('error', (err: any) => reject(err));
         });
 
         socket.on('timeout', () => {
