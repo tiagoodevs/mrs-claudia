@@ -11,9 +11,8 @@
     "db:init": "node -e \"const Database=require('better-sqlite3');const fs=require('fs');const db=new Database(process.env.DATABASE_PATH||'database.sqlite');db.exec(fs.readFileSync('schema.sql','utf8'));console.log('Database initialized.');\""
   },
   "dependencies": {
-    "discord.js": "^14.15.3",
-    "better-sqlite3": "^11.3.0",
     "axios": "^1.7.7",
+    "discord.js": "^14.15.3",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
